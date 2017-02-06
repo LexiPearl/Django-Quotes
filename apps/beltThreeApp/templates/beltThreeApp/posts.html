@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load staticfiles %}
+    <meta charset="UTF-8">
+    <title>User Info</title>
+    <link rel="stylesheet" href="{% static 'beltThreeApp/css/beltThreeApp.css' %}"media="screen"  charset="utf-8">
+</head>
+<body>
+    <div id="wrapper">
+        <div id="topright">
+            <a href="{% url 'beltThreeApp:dashboard' %}">Home</a>
+            <a href="{%url 'beltThreeApp:logout'  %}">Logout</a>
+        </div>
+        <h1>Posts by {{user.alias}}</h1>
+        <h1>Count: {{numQuotes}}</h1>
+
+        {% for x in quotes %}
+            <br>
+            <p><span class="red">{{x.speaker}}:</span>{{x.quote}}</p>
+            <br>
+        {% endfor %}
+
+    </div>
+</body>
+</html>

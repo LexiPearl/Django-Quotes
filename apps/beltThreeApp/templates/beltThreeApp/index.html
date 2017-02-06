@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load staticfiles %}
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{% static 'beltThreeApp/css/beltThreeApp.css' %}"media="screen"  charset="utf-8">
+</head>
+<body>
+    <div id="wrapper">
+        <div id="topright">
+            <a href="{%url 'beltThreeApp:logout'%}">Logout</a>
+        </div>
+        <h1>Welcome, {{request.session.alias}}</h1>
+        <h2>Quotable Quotes</h2>
+        <div class="quotes">
+            {% for x in nonFavorites %}
+                <div class="quote">
+                <p>{{x.speaker}}:{{x.quote}}</p>
+                <p>Posted by <a href="{% url 'beltThreeApp:userInfo' user_id=x.quoteAdder.id %}">{{x.quoteAdder.alias}}</a></p>
+                <a href="{% url 'beltThreeApp:addFavorite' quote_id=x.id %}">Add to My List</a>
+            </div>
+            {% endfor %}
+        </div>
+        <h2>Your Favorites</h2>
+        <div class="quotes">
+            {% for x in Favorites %}
+            <div class="quote">
+                <p>{{x.quote_id.speaker}}: {{x.quote_id.quote}}</p>
+                <p>Posted by<a href="{% url 'beltThreeApp:userInfo' user_id=x.quote_id.quoteAdder.id %}"> {{x.quote_id.quoteAdder.name}}</a></p>
+                <a href="{% url 'beltThreeApp:removeFavorite' quote_id=x.quote_id.id %}">Remove from My List</a>
+            </div>
+            {% endfor %}
+        </div>
+        <h2>Contribute a Quote:</h2>
+            {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                    <li {% if message.tags %} class={{message.tags}} {% endif %}>{{message}}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+            <form action="{%url 'beltThreeApp:addQuote' %}" method='post'>
+                {% csrf_token %}
+                <p><label for="speaker">Quoted By:</label>
+                <input type="text" name="speaker" class="longer" required></p>
+                <p><label for="quote">Message:</label>
+                <textarea rows="4" cols="40" name="quote" required></textarea>
+                <p><input type="submit" value="Submit"></p>
+        </form>
+    </div>
+</body>
+</html>
